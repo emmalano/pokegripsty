@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Audio & Reaction Images</title>
+  <style>
+    /* Reset margins and set a full white background */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    /* Container for the image and clickable overlays */
+    #container {
+      position: relative;
+      width: 600px;  /* Adjust to match your image width */
+    }
+    
+    /* The main image displayed */
+    #cutout {
+      width: 100%;
+      display: block;
+    }
+    
+    /* Common style for clickable overlay areas */
+    .clickable {
+      position: absolute;
+      cursor: pointer;
+      /* Uncomment for debugging:
+      background-color: rgba(255, 0, 0, 0.3); */
+    }
+    
+    /* Positioning for the head clickable area */
+    #head {
+      top: 10px;      /* Adjust these values to align with your image */
+      left: 200px;
+      width: 200px;
+      height: 100px;
+    }
+    
+    /* Positioning for the stomach clickable area */
+    #stomach {
+      top: 120px;
+      left: 220px;
+      width: 160px;
+      height: 100px;
+    }
+    
+    /* Positioning for the crotch clickable area */
+    #crotch {
+      top: 230px;
+      left: 240px;
+      width: 120px;
+      height: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- The base image that will be replaced temporarily -->
+    <img id="cutout" src="base.png" alt="Base photo of me">
+    
+    <!-- Invisible clickable areas -->
+    <div id="head" class="clickable" onclick="handleClick('head')"></div>
+    <div id="stomach" class="clickable" onclick="handleClick('stomach')"></div>
+    <div id="crotch" class="clickable" onclick="handleClick('crotch')"></div>
+  </div>
+  
+  <script>
+    // File paths for base and reaction images
+    const baseImage = 'base.png';
+    const reactionImages = {
+      head: 'head_react.png',
+      stomach: 'stomach_react.png',
+      crotch: 'crotch_react.png'
+    };
+    
+    // Create Audio objects for each sound clip
+    const audioFiles = {
+      head: new Audio('doh.mp3'),
+      stomach: new Audio('tickle.mp3'),
+      crotch: new Audio('giggle.mp3')
+    };
+
+    // Duration (in milliseconds) to show the reaction image
+    const reactionDuration = 500; // 500 ms = half a second
+
+    /**
+     * Handles a click on one of the areas.
+     * @param {string} area - The area that was clicked ("head", "stomach", or "crotch").
+     */
+    function handleClick(area) {
+      const imgElement = document.getElementById('cutout');
+      
+      // Change the image to the reaction image
+      imgElement.src = reactionImages[area];
+      
+      // Reset and play the corresponding audio clip
+      const audio = audioFiles[area];
+      audio.currentTime = 0;
+      audio.play().catch(err => console.error(`Error playing ${area} audio:`, err));
+      
+      // After the reactionDuration, revert back to the base image
+      setTimeout(() => {
+        imgElement.src = baseImage;
+      }, reactionDuration);
+    }
+  </script>
+</body>
+</html>
