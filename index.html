@@ -11,7 +11,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
             margin: 0;
         }
 
@@ -20,7 +19,7 @@
         }
 
         #cutout {
-            width: 500px; /* Adjust if needed */
+            width: 500px; /* Adjust as needed */
             height: auto;
             cursor: pointer;
             display: block;
@@ -42,13 +41,10 @@
             const stomachAudio = new Audio("audio/tickle.mp3");
             const crotchAudio = new Audio("audio/giggle.mp3");
 
-            // Click detection based on image area
+            // Click detection
             cutout.addEventListener("click", function (event) {
                 const rect = cutout.getBoundingClientRect();
-                const clickX = event.clientX - rect.left;
                 const clickY = event.clientY - rect.top;
-
-                const imgWidth = rect.width;
                 const imgHeight = rect.height;
 
                 let newSrc = "images/base.png";
@@ -77,7 +73,7 @@
                     audio.play();
                 }
 
-                // Revert back to base image after 0.5 seconds
+                // Revert to base image after 0.5 seconds
                 setTimeout(() => {
                     cutout.src = "images/base.png";
                 }, 500);
