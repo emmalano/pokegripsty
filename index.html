@@ -1,46 +1,89 @@
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      const cutout = document.getElementById("cutout");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poke Gripsty</title>
+    <style>
+        body {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
 
-      // Audio files
-      const headAudio = new Audio("audio/doh.mp3");
-      const stomachAudio = new Audio("audio/tickle.mp3");
-      const crotchAudio = new Audio("audio/giggle.mp3");
+        #container {
+            position: relative;
+        }
 
-      // Click event for different body parts
-      document.body.addEventListener("click", function (event) {
-          const x = event.clientX;
-          const y = event.clientY;
-          let newSrc = "images/base.png";
-          let audio = null;
+        #cutout {
+            width: 500px; /* Adjust if needed */
+            height: auto;
+            cursor: pointer;
+            display: block;
+        }
+    </style>
+</head>
+<body>
 
-          // Change these values based on your actual image size and positioning
-          if (y < 200) { 
-              // Head area clicked
-              newSrc = "images/head_react.png";
-              audio = headAudio;
-          } else if (y > 400) { 
-              // Crotch area clicked
-              newSrc = "images/crotch_react.png";
-              audio = crotchAudio;
-          } else { 
-              // Stomach area clicked
-              newSrc = "images/stomach_react.png";
-              audio = stomachAudio;
-          }
+    <div id="container">
+        <img id="cutout" src="images/base.png" alt="Base photo of me">
+    </div>
 
-          // Update image
-          cutout.src = newSrc;
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cutout = document.getElementById("cutout");
 
-          // Play sound
-          if (audio) {
-              audio.play();
-          }
+            // Load audio files
+            const headAudio = new Audio("audio/doh.mp3");
+            const stomachAudio = new Audio("audio/tickle.mp3");
+            const crotchAudio = new Audio("audio/giggle.mp3");
 
-          // Revert to base image after 0.5 seconds
-          setTimeout(() => {
-              cutout.src = "images/base.png";
-          }, 500);
-      });
-  });
-</script>
+            // Click detection based on image area
+            cutout.addEventListener("click", function (event) {
+                const rect = cutout.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const clickY = event.clientY - rect.top;
+
+                const imgWidth = rect.width;
+                const imgHeight = rect.height;
+
+                let newSrc = "images/base.png";
+                let audio = null;
+
+                if (clickY < imgHeight * 0.3) { 
+                    // Head area
+                    newSrc = "images/head_react.png";
+                    audio = headAudio;
+                } else if (clickY > imgHeight * 0.75) { 
+                    // Crotch area
+                    newSrc = "images/crotch_react.png";
+                    audio = crotchAudio;
+                } else { 
+                    // Stomach area
+                    newSrc = "images/stomach_react.png";
+                    audio = stomachAudio;
+                }
+
+                // Change image
+                cutout.src = newSrc;
+
+                // Play sound
+                if (audio) {
+                    audio.currentTime = 0;
+                    audio.play();
+                }
+
+                // Revert back to base image after 0.5 seconds
+                setTimeout(() => {
+                    cutout.src = "images/base.png";
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+</html>
